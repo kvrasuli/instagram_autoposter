@@ -17,6 +17,11 @@ def fetch_spacex_last_launch():
     for i, url in enumerate(urls):
         download_a_pic(url, f'spacex_{i}.jpg')
 
-if __name__ == '__main__':
-    fetch_spacex_last_launch()
+def get_file_extension(url):
+    file_extension = url.split('/')[-1].split('.')[-1]
+    return file_extension
 
+if __name__ == '__main__':
+    # fetch_spacex_last_launch()
+    url = 'https://media.stsci.edu/uploads/image_file/image_attachment/1/full_jpg.jpg'
+    print(get_file_extension(url))
