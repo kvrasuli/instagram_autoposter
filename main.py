@@ -1,6 +1,6 @@
 import requests
 from pathlib import Path
-
+import pprint
 
 def download_a_pic(url, filename):
     Path('images/').mkdir(parents=True, exist_ok=True)
@@ -18,5 +18,11 @@ def fetch_spacex_last_launch():
         download_a_pic(url, f'spacex_{i}.jpg')
 
 if __name__ == '__main__':
-    fetch_spacex_last_launch()
+    # fetch_spacex_last_launch()
 
+# 'https://media.stsci.edu/uploads/image_file/image_attachment/1/full_jpg.jpg'
+    pp = pprint.PrettyPrinter()
+    response = requests.get('http://hubblesite.org/api/v3/image/1')
+    image_list = response.json()['image_files']
+    for image in image_list:
+        print(image['file_url'])
