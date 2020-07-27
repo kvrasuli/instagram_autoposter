@@ -1,6 +1,6 @@
 # Space Instagram
 
-This is the app automatically posting photos from the last SpaceX launch and also from Hubble website by specified category.
+This is the app automatically posting photos to your instagram account from the last SpaceX launch and also from Hubble website by specified category.
 
 ### How to install
 
