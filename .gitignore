@@ -1,4 +1,5 @@
 images/
+converted_images/
 *.jpg
 config/
 # Byte-compiled / optimized / DLL files

@@ -1,32 +1,35 @@
 from PIL import Image
 from instabot import Bot
+from pathlib import Path
 from dotenv import load_dotenv
 import os
 
 
-def prepare_image(image_file):
+def convert_image(image_file):
     try:
         image = Image.open(image_file)
         image.thumbnail((1080, 1080))
-        image.save(f"{image_file.split('.')[0]}.jpg", format='JPEG')
-        os.remove(image_file)
+        image_stem = Path(image_file).stem
+        image.save(Path.cwd().joinpath('converted_images').joinpath(f"{image_stem}.jpg"), format='JPEG')
     except ValueError:
-        os.remove(image_file)
+        Path(image_file).unlink()
+        
+
+def post_all_images(username, password):
+    bot = Bot()
+    bot.login(username=username, password=password)
+    images = Path.cwd().joinpath('images')
+    for image in images.iterdir():
+        convert_image(image)
+    
+    converted_images = Path.cwd().joinpath('converted_images')
+    for image in converted_images.iterdir():
+        bot.upload_photo(image, caption='caption')
 
 
-def post_all_images():
+if __name__ == '__main__':
     load_dotenv()
     username = os.getenv('INSTAGRAM_USERNAME')
     password = os.getenv('INSTAGRAM_PASSWORD')
-    bot = Bot()
-    bot.login(username=username, password=password)
-    
-    images = os.listdir('images/')
-    for image in images:
-        prepare_image(f'images/{image}')
-        bot.upload_photo(image, caption='caption')
-        if bot.api.last_response.status_code != 200:
-            print(bot.api.last_response)
-
-if __name__ == '__main__':
-    post_all_images()
+    Path('converted_images').mkdir(parents=True, exist_ok=True)
+    post_all_images(username, password)
