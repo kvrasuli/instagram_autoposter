@@ -10,7 +10,6 @@ def convert_image(image_file):
     image.thumbnail((1080, 1080))
     image_stem = Path(image_file).stem
     image.save(Path.cwd().joinpath('converted_images').joinpath(f"{image_stem}.jpg"), format='JPEG')
-    Path(image_file).unlink()
         
 
 def post_all_images(username, password):
