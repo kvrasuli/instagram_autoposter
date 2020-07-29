@@ -6,13 +6,11 @@ import os
 
 
 def convert_image(image_file):
-    try:
-        image = Image.open(image_file)
-        image.thumbnail((1080, 1080))
-        image_stem = Path(image_file).stem
-        image.save(Path.cwd().joinpath('converted_images').joinpath(f"{image_stem}.jpg"), format='JPEG')
-    except ValueError:
-        Path(image_file).unlink()
+    image = Image.open(image_file)
+    image.thumbnail((1080, 1080))
+    image_stem = Path(image_file).stem
+    image.save(Path.cwd().joinpath('converted_images').joinpath(f"{image_stem}.jpg"), format='JPEG')
+    Path(image_file).unlink()
         
 
 def post_all_images(username, password):
@@ -20,8 +18,11 @@ def post_all_images(username, password):
     bot.login(username=username, password=password)
     images = Path.cwd().joinpath('images')
     for image in images.iterdir():
-        convert_image(image)
-    
+        try:
+            convert_image(image)
+        except ValueError:
+            Path(image).unlink()
+
     converted_images = Path.cwd().joinpath('converted_images')
     for image in converted_images.iterdir():
         bot.upload_photo(image, caption='caption')
